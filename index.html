@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Técnica de Estudio</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #F7F2E7; color: #3E3A3A; }
+        .question { margin-bottom: 15px; opacity: 0; transform: translateY(20px); animation: fadeIn 0.5s forwards; }
+        button { 
+            padding: 10px; 
+            margin-top: 10px; 
+            cursor: pointer; 
+            border: none; 
+            background-color: #F0D9B5; 
+            color: #3E3A3A; 
+            border-radius: 5px; 
+            transition: background-color 0.3s;
+        }
+        button:hover { background-color: #E6C48E; }
+        h3 { opacity: 0; transform: scale(0.8); animation: fadeInScale 0.5s 0.5s forwards; }
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInScale {
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <h2>¿Qué Técnica de Estudio Debes Usar Hoy?</h2>
+    <div id="quiz"></div>
+    <h3 id="result"></h3>
+    
+    <script>
+        const questions = [
+            { q: "¿Cómo te sientes hoy respecto a estudiar?", a: ["Motivado", "Normal", "Cansado", "Distraído", "Aburrido", "Ansioso", "Estresado"] },
+            { q: "¿Cómo va tu desempeño en la materia?", a: ["Me cuesta", "La entiendo", "Olvido rápido", "Me aburro", "No me interesa", "Me siento perdido", "Muy bien"] },
+            { q: "¿Cuánto tiempo tienes disponible?", a: ["Varias horas", "Tiempo moderado", "Poco tiempo", "Pocas pausas", "Solo unos minutos", "Todo el día", "Unos 30 minutos"] },
+            { q: "¿Qué problema sientes hoy?", a: ["No comprendo", "Desorganizado", "Cansancio", "Distracción", "Falta de motivación", "Falta de enfoque", "Sobrecarga de información"] },
+            { q: "¿Cómo prefieres estudiar hoy?", a: ["Explicando en voz alta", "Escribiendo", "Intervalos de estudio", "Ejercicios y flashcards", "Estudiando con ejemplos prácticos", "Discusión en grupo", "Analizando casos"] },
+            { q: "¿Qué tipo de material prefieres estudiar?", a: ["Teoría", "Ejercicios", "Resúmenes", "Libros completos", "Artículos y publicaciones científicas", "Casos prácticos", "Videos educativos"] },
+            { q: "¿Qué tan seguido estudias?", a: ["Cada día", "Al menos 3 veces por semana", "Una vez a la semana", "Solo antes de los exámenes", "Casi nunca", "Cada dos días", "Cuando tengo tiempo"] },
+            { q: "¿Te resulta fácil concentrarte?", a: ["Sí, me concentro rápido", "Depende del día", "A veces me cuesta", "Me distraigo constantemente", "Tengo dificultad para concentrarme", "Me enfoco muy bien", "Solo con música"] },
+            { q: "Cuando estudias, ¿prefieres un ambiente tranquilo?", a: ["Sí, totalmente tranquilo", "Con algo de ruido de fondo", "Un poco de música está bien", "Me gusta estudiar en grupos", "Prefiero un entorno con mucho ruido", "Con una charla constante", "En silencio total"] },
+            { q: "¿Cuánto tiempo pasas repasando antes de los exámenes?", a: ["Varios días", "Un día antes", "Solo unas horas", "Casi nada", "No repaso antes de los exámenes", "Una semana antes", "Repaso durante la semana"] },
+            { q: "¿Te resulta útil estudiar casos prácticos?", a: ["Sí, me ayuda mucho", "A veces", "No siempre", "No me gusta mucho", "Prefiero otro enfoque", "Me enfoco mejor en teoría", "Solo en casos complejos"] },
+            { q: "¿Utilizas tarjetas de memoria para repasar?", a: ["Sí, con regularidad", "A veces, cuando tengo tiempo", "No, pero me gustaría intentarlo", "No me interesa", "Nunca las uso", "Solo para exámenes", "Uso otras herramientas"] }
+        ];
+        
+        const methods = { A: "Método de Feynman", B: "Síntesis y Mapas Mentales", C: "Pomodoro", D: "Técnica Activa", E: "SQ3R", F: "Del Caso", G: "Leitner", H: "Discusión de Grupo", I: "Repetición Espaciada" };
+        const responses = { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, G: 0, H: 0, I: 0 };
+        let currentQuestion = 0;
+        
+        function nextQuestion(choice) {
+            if (choice !== undefined) responses[choice]++;
+            if (currentQuestion >= questions.length) return showResult();
+            
+            const q = questions[currentQuestion];
+            let quizDiv = document.getElementById("quiz");
+            quizDiv.innerHTML = `<div class='question'><h3>${q.q}</h3>` +
+                q.a.map((ans, i) => `<button onclick='nextQuestion("${String.fromCharCode(65 + i)}")'>${ans}</button>`).join(" ") + `</div>`;
+            
+            currentQuestion++;
+        }
+        
+        function showResult() {
+            let bestMethod = Object.keys(responses).reduce((a, b) => responses[a] > responses[b] ? a : b);
+            let explanation = "";
+            switch (bestMethod) {
+                case "A":
+                    explanation = "El Método de Feynman consiste en explicar un concepto como si lo estuvieras enseñando a otra persona, lo cual ayuda a profundizar en tu comprensión.";
+                    break;
+                case "B":
+                    explanation = "La Síntesis y los Mapas Mentales son técnicas visuales que ayudan a organizar la información y a conectarla de manera coherente.";
+                    break;
+                case "C":
+                    explanation = "La Técnica Pomodoro se basa en estudiar en intervalos de 25 minutos seguidos de breves descansos, lo que mejora la concentración.";
+                    break;
+                case "D":
+                    explanation = "La Técnica Activa consiste en involucrarte directamente con el contenido, por ejemplo, haciendo ejercicios prácticos o preguntas sobre el material.";
+                    break;
+                case "E":
+                    explanation = "SQ3R (Survey, Question, Read, Recite, Review) es un enfoque estructurado de lectura que te ayuda a organizar la información de manera efectiva.";
+                    break;
+                case "F":
+                    explanation = "El Método del Caso se basa en estudiar situaciones reales o hipotéticas y analizar las decisiones y consecuencias para entender conceptos y mejorar habilidades de resolución de problemas.";
+                    break;
+                case "G":
+                    explanation = "La Técnica de Leitner es un sistema de repetición espaciada que utiliza tarjetas de memoria, repasar más frecuentemente las tarjetas que no recuerdas bien para reforzar tu memoria a largo plazo.";
+                    break;
+                case "H":
+                    explanation = "La Discusión de Grupo te permite compartir ideas y explicar conceptos a otros, lo que mejora tu comprensión a través del diálogo y la interacción.";
+                    break;
+                case "I":
+                    explanation = "La Repetición Espaciada es una técnica que se basa en repasar la información a intervalos crecientes para ayudar a memorizar de forma más efectiva a largo plazo.";
+                    break;
+            }
+            
+            document.getElementById("quiz").innerHTML = "";
+            document.getElementById("result").innerHTML = `Hoy te conviene usar: <strong>${methods[bestMethod]}</strong><br><br><em>${explanation}</em>`;
+        }
+        
+        nextQuestion();
+    </script>
+</body>
+</html>
